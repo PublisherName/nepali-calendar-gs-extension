@@ -1,0 +1,11 @@
+{
+    "uuid": "nepali-calendar-gs-extension@subashghimire.info.np",
+    "name": "Nepali Calendar",
+    "description": "Shows Nepali date along with events and festivals.",
+    "shell-version": [
+        "45",
+        "46",
+        "47"
+    ],
+    "version": 1
+}
