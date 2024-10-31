@@ -10,7 +10,7 @@
 .year-month-label {
     font-size: 14px;
     font-weight: bold;
-    color: #ff5722;
+    color: #c94114;
     /* Primary color for year and month */
     margin-bottom: 8px;
     text-align: center;
@@ -51,6 +51,9 @@
     color: #ffffff;
     text-align: center;
     margin-top: 4px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .custom-popup-container {
