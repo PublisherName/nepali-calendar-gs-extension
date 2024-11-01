@@ -1,0 +1,40 @@
+name: Zip and Release
+
+on:
+  push:
+    paths:
+      - 'nepali-calendar-gs-extension@subashghimire.info.np/**'
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Extract version from metadata.json
+      id: extract_version
+      run: |
+        VERSION=$(jq -r '.version' nepali-calendar-gs-extension@subashghimire.info.np/metadata.json)
+        echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Zip the nepali-calendar-gs-extension@subashghimire.info.np directory contents
+      run: |
+        cd nepali-calendar-gs-extension@subashghimire.info.np
+        zip -r ../nepali-calendar-gs-extension@subashghimire.info.np.zip .
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ env.RELEASE_VERSION }}
+        body: "This release was automatically generated, only FOR GNOME 46 & 47."
+        files: nepali-calendar-gs-extension@subashghimire.info.np.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
