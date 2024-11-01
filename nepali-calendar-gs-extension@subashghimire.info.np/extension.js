@@ -53,6 +53,7 @@ const Indicator = GObject.registerClass(
             popupContainer.add_child(this._eventLabel);
 
             let customItem = new PopupMenu.PopupBaseMenuItem({ reactive: false });
+            customItem.add_style_class_name('custom-popup-item');
             customItem.actor.add_child(popupContainer);
             this.menu.addMenuItem(customItem);
         }

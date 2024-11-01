@@ -3,12 +3,13 @@
     font-size: 14px;
     font-weight: bold;
     color: #ffffff;
+    /*background-color: #333;*/
     padding: 0 4px;
 }
 
 /* Style for year and month at the top of popup */
 .year-month-label {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     color: #c94114;
     /* Primary color for year and month */
@@ -18,27 +19,35 @@
 
 /* Circle container for the day and date */
 .day-date-circle {
-    background-color: #333;
+    background-color: #ffffff;
     /* Neutral color for the circle */
-    color: #fff;
-    border-radius: 50%;
+    color: #000000b6;
+    border-radius: 50px;
     padding: 15px;
     width: 50px;
     height: 50px;
-    margin: 10px auto;
+    margin: 10px;
     align-items: center;
     justify-content: center;
 }
 
-.day-label,
 .date-label {
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: bold;
     text-align: center;
+    color: #333;
+}
+
+.day-label {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
 }
 
 /* Style for the English full date */
 .english-date-label {
-    font-size: 12px;
+    font-size: 14px;
     color: #ffffff;
     text-align: center;
     margin: 8px 0;
@@ -47,7 +56,7 @@
 /* Style for Tithi and Event labels */
 .tithi-label,
 .event-label {
-    font-size: 12px;
+    font-size: 14px;
     color: #ffffff;
     text-align: center;
     margin-top: 4px;
@@ -61,5 +70,11 @@
     background-color: #333;
     color: #ffffff;
     border-radius: 5px;
-    margin: 10px 0;
+    margin: 2px;
+    width: 200px;
+}
+
+.custom-popup-item {
+    background-color: #333;
+    border-radius: 5px;
 }
