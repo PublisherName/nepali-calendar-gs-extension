@@ -6,8 +6,10 @@ const Me = Main.extensionManager.lookup('nepali-calendar-gs-extension@subashghim
 export const readJSONFile = (filePath) => {
     try {
         const fullPath = `${Me.path}/${filePath}`;
-        let fileContent = String(GLib.file_get_contents(fullPath)[1]);
-        return JSON.parse(fileContent);
+        let fileContent = GLib.file_get_contents(fullPath)[1];
+        let decoder = new TextDecoder('utf-8');
+        let jsonString = decoder.decode(fileContent);
+        return JSON.parse(jsonString);
     } catch (e) {
         log(`Error reading JSON file: ${filePath}`);
         return {};
