@@ -1,12 +1,17 @@
 # Nepali Calendar Gnome Shell Extension
 This is a gnome shell extension that shows Nepali calendar in the top bar of Gnome Shell. 
 
-**Api integration is pending.**
 
 ## Screenshots
 ![Screenshot](assets/nepali-calendar-gs-extension.png)
 
 ## Installation
+
+ [![Install on GNOME Shell](https://pbs.twimg.com/media/D6s8OS2U8AAaLNQ.png)](https://extensions.gnome.org/extension/7490/nepali-calendar/)
+
+
+
+## Manual Installation
 1. Clone this repository.
    ```bash
     git clone git@github.com:PublisherName/nepali-calendar-gs-extension.git
