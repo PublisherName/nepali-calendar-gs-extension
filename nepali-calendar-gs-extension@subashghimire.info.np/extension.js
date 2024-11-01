@@ -71,9 +71,23 @@ const Indicator = GObject.registerClass(
             this._eventLabel.set_text(nepaliDateInfo.npEvent.split('/').join('\n'));
 
             if (this._timeout) GLib.source_remove(this._timeout);
-            this._timeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 3600, () => {
+
+            this._scheduleMidnightUpdate();
+        }
+
+        _scheduleMidnightUpdate() {
+            let now = new Date();
+            let midnight = new Date();
+            midnight.setHours(24, 0, 0, 0);
+            let timeUntilMidnight = (midnight - now) / 1000;
+
+            this._timeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, timeUntilMidnight, () => {
                 this._updateLabel();
-                return GLib.SOURCE_CONTINUE;
+                this._timeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 86400, () => {
+                    this._updateLabel();
+                    return GLib.SOURCE_CONTINUE;
+                });
+                return GLib.SOURCE_REMOVE;
             });
         }
 
