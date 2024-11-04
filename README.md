@@ -35,5 +35,18 @@ This is a gnome shell extension that shows Nepali calendar in the top bar of Gno
 ## Usage
 The extension shows the current Nepali date in the top bar of Gnome Shell. Clicking on the date will show the Nepali date and event for the current day.
 
+# Code Formatting with ESLint and Prettier
+
+This project uses ESLint and Prettier to enforce consistent code formatting and style conventions, including single quotes and 2-space indentation.
+
+- Install esling and prettier
+
+    ```npm install eslint eslint-plugin-prettier```
+
+- Run eslint
+
+    ```npx eslint . --fix```
+
+
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
