@@ -123,7 +123,7 @@ const Indicator = GObject.registerClass(
           timeUntilMidnight,
           () => {
             this._updateLabel();
-            this._updateTimeout = GLib.timeout_add_seconds(
+            this._dailyUpdateTimeout = GLib.timeout_add_seconds(
               GLib.PRIORITY_DEFAULT,
               SECONDS_PER_DAY,
               () => {
@@ -145,6 +145,12 @@ const Indicator = GObject.registerClass(
         GLib.source_remove(this._updateTimeout);
         this._updateTimeout = null;
       }
+
+      if (this._dailyUpdateTimeout) {
+        GLib.source_remove(this._dailyUpdateTimeout);
+        this._dailyUpdateTimeout = null;
+      }
+
       super.destroy();
     }
   }
