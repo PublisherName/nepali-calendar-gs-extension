@@ -5,7 +5,10 @@ import Clutter from 'gi://Clutter';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
-import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import {
+  Extension,
+  gettext as _, // eslint-disable-line no-unused-vars
+} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import {
   formatNepaliDateData,
@@ -30,7 +33,6 @@ const Indicator = GObject.registerClass(
       this.add_child(this._box);
       this._createPopupMenu();
       this._updateLabel();
-      Main.panel.addToStatusArea('nepali-date-extension', this);
     }
 
     _createPopupMenu() {
@@ -160,16 +162,63 @@ export default class NepaliCalendar extends Extension {
   constructor(metadata) {
     super(metadata);
     this._extension = null;
+    this._positionChangedId = null;
   }
 
   enable() {
-    this._extension = new Indicator(this.path);
+    this._settings = this.getSettings();
+    const position = this._settings.get_string('menu-position');
+
+    this._extension = new Indicator(this.path, position);
+    this._addToPanel(position);
+
+    this._positionChangedId = this._settings.connect(
+      'changed::menu-position',
+      () => {
+        const newPosition = this._settings.get_string('menu-position');
+        this._moveIndicator(newPosition);
+      }
+    );
   }
 
   disable() {
+    if (this._positionChangedId) {
+      this._settings.disconnect(this._positionChangedId);
+      this._positionChangedId = null;
+    }
+
+    if (this._settings) {
+      this._settings.run_dispose();
+      this._settings = null;
+    }
+
     if (this._extension) {
+      this._removeFromPanel();
       this._extension.destroy();
       this._extension = null;
     }
+  }
+
+  _moveIndicator(newPosition) {
+    this._removeFromPanel();
+    this._addToPanel(newPosition);
+  }
+
+  _removeFromPanel() {
+    const { container, menu } = this._extension;
+    container?.get_parent()?.remove_child(container);
+    Main.panel.menuManager.removeMenu(menu);
+  }
+
+  _addToPanel(position) {
+    const positionMap = {
+      left: Main.panel._leftBox,
+      center: Main.panel._centerBox,
+      right: Main.panel._rightBox,
+    };
+
+    const panelPosition = positionMap[position];
+    panelPosition.insert_child_at_index(this._extension.container, -1);
+    Main.panel.menuManager.addMenu(this._extension.menu);
   }
 }
