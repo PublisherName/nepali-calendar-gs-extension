@@ -169,7 +169,7 @@ export default class NepaliCalendar extends Extension {
     this._settings = this.getSettings();
     const position = this._settings.get_string('menu-position');
 
-    this._extension = new Indicator(this.path, position);
+    this._extension = new Indicator(this.path);
     this._addToPanel(position);
 
     this._positionChangedId = this._settings.connect(
@@ -188,7 +188,6 @@ export default class NepaliCalendar extends Extension {
     }
 
     if (this._settings) {
-      this._settings.run_dispose();
       this._settings = null;
     }
 

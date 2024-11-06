@@ -8,6 +8,6 @@
         "46",
         "47"
     ],
-    "version": "4",
-    "settings-schema": "org.gnome.shell.extensions.nepal.calendar.gschema"
+    "version": 6,
+    "settings-schema": "org.gnome.shell.extensions.nepal-calendar"
 }
