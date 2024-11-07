@@ -1,5 +1,7 @@
 #!/bin/bash
 
+glib-compile-schemas ./nepali-calendar-gs-extension@subashghimire.info.np/schemas
+
 if (( $EUID == 0 )); then
 	INSTALL_DIR="/usr/share/gnome-shell/extensions"
 else

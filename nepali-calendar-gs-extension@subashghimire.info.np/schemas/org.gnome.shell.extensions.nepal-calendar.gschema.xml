@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.nepal-calendar" path="/org/gnome/shell/extensions/nepal-calendar/">
+    <key name="menu-position" type="s">
+    <default>'center'</default>
+        <summary>Position of the Nepali Calendar Menu</summary>
+      <description>Allows users to choose where the menu is placed on the panel (e.g., 'left', 'center', 'right').</description>
+    </key>
+  </schema>
+</schemalist>
