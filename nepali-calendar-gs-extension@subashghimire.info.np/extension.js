@@ -22,12 +22,12 @@ const Indicator = GObject.registerClass(
       this._updateTimeout = null;
       this._extensionPath = extensionPath;
       this._box = new St.BoxLayout({
-        style_class: 'panel-status-menu-box',
+        style_class: 'np-cal-panel-status-menu-box',
       });
       this._nepaliDateLabel = new St.Label({
         text: '',
         y_align: Clutter.ActorAlign.CENTER,
-        style_class: 'top-bar-date-label',
+        style_class: 'np-cal-top-bar-date-label',
       });
       this._box.add_child(this._nepaliDateLabel);
       this.add_child(this._box);
@@ -38,38 +38,38 @@ const Indicator = GObject.registerClass(
     _createPopupMenu() {
       const popupContainer = new St.BoxLayout({
         vertical: true,
-        style_class: 'custom-popup-container',
+        style_class: 'np-cal-custom-popup-container',
       });
       this._yearMonthLabel = new St.Label({
         text: '',
-        style_class: 'year-month-label',
+        style_class: 'np-cal-year-month-label',
       });
       const dayDateContainer = new St.BoxLayout({
-        style_class: 'day-date-circle',
+        style_class: 'np-cal-day-date-circle',
         vertical: true,
         x_align: Clutter.ActorAlign.CENTER,
       });
       this._dayLabel = new St.Label({
         text: '',
-        style_class: 'day-label',
+        style_class: 'np-cal-day-label',
       });
       this._dateLabel = new St.Label({
         text: '',
-        style_class: 'date-label',
+        style_class: 'np-cal-date-label',
       });
       dayDateContainer.add_child(this._dayLabel);
       dayDateContainer.add_child(this._dateLabel);
       this._englishDateLabel = new St.Label({
         text: '',
-        style_class: 'english-date-label',
+        style_class: 'np-cal-english-date-label',
       });
       this._tithiLabel = new St.Label({
         text: '',
-        style_class: 'tithi-label',
+        style_class: 'np-cal-tithi-label',
       });
       this._eventLabel = new St.Label({
         text: '',
-        style_class: 'event-label',
+        style_class: 'np-cal-event-label',
       });
 
       popupContainer.add_child(this._yearMonthLabel);
@@ -81,7 +81,7 @@ const Indicator = GObject.registerClass(
       const customItem = new PopupMenu.PopupBaseMenuItem({
         reactive: false,
       });
-      customItem.add_style_class_name('custom-popup-item');
+      customItem.add_style_class_name('np-cal-custom-popup-item');
       customItem.actor.add_child(popupContainer);
       this.menu.addMenuItem(customItem);
     }
