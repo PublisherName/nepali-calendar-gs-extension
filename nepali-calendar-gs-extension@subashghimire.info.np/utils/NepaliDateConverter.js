@@ -8,7 +8,7 @@ const nepaliCalendarData = {
     totalDays: 366,
   },
   82: {
-    monthDays: [30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30],
+    monthDays: [31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30],
     totalDays: 365,
   },
   83: {
