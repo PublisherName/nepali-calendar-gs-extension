@@ -2,39 +2,89 @@ name: Zip and Release
 
 on:
   push:
-    paths:
-      - 'nepali-calendar-gs-extension@subashghimire.info.np/**'
     branches:
       - main
-  workflow_dispatch:
+    paths:
+      - "nepali-calendar-gs-extension@subashghimire.info.np/**"
+      - "build.sh"
+      - "pyproject.toml"
+      - "uv.lock"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "nepali-calendar-gs-extension@subashghimire.info.np/**"
+      - "build.sh"
+      - "pyproject.toml"
+      - "uv.lock"
 
 permissions:
   contents: write
 
 jobs:
-  create-release:
+  build-checks:
     runs-on: ubuntu-latest
 
+    outputs:
+      release_version: ${{ steps.extract_version.outputs.release_version }}
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Extract version from metadata.json
-      id: extract_version
-      run: |
-        VERSION=$(jq -r '.version' nepali-calendar-gs-extension@subashghimire.info.np/metadata.json)
-        echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
 
-    - name: Zip the nepali-calendar-gs-extension@subashghimire.info.np directory contents
-      run: |
-        cd nepali-calendar-gs-extension@subashghimire.info.np
-        zip -r ../nepali-calendar-gs-extension@subashghimire.info.np.zip .
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ env.RELEASE_VERSION }}
-        body: "This release was automatically generated."
-        files: nepali-calendar-gs-extension@subashghimire.info.np.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Extract version from metadata.json
+        id: extract_version
+        run: |
+          VERSION=$(jq -r '.version' nepali-calendar-gs-extension@subashghimire.info.np/metadata.json)
+          echo "release_version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Build extension zip
+        run: ./build.sh
+
+      - name: Verify zip exists
+        run: test -f nepali-calendar-gs-extension@subashghimire.info.np.zip
+
+      - name: Check zip file
+        run: uv run shexli nepali-calendar-gs-extension@subashghimire.info.np.zip
+
+      - name: Upload zip artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-zip
+          path: nepali-calendar-gs-extension@subashghimire.info.np.zip
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: build-checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download zip artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-zip
+          path: .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.build-checks.outputs.release_version }}
+          name: v${{ needs.build-checks.outputs.release_version }}
+          body: "This release was automatically generated."
+          files: nepali-calendar-gs-extension@subashghimire.info.np.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

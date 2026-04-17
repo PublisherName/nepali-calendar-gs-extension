@@ -1,0 +1,9 @@
+[project]
+name = "nepali-calendar-gs-extension"
+version = "0.1.0"
+description = "This GNOME Shell extension displays the Nepali calendar in the top bar"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "shexli>=0.2.1",
+]
