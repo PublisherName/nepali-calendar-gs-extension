@@ -34,7 +34,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         tag_name: v${{ env.RELEASE_VERSION }}
-        body: "This release was automatically generated, only FOR GNOME 46 & 47."
+        body: "This release was automatically generated."
         files: nepali-calendar-gs-extension@subashghimire.info.np.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
