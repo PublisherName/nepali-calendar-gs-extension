@@ -32,6 +32,7 @@ This is a gnome shell extension that shows Nepali calendar in the top bar of Gno
     ```
 5. Enable the extension using Gnome Tweaks or Extensions application.
 
+
 ## Usage
 The extension shows the current Nepali date in the top bar of Gnome Shell. Clicking on the date will show the Nepali date and event for the current day.
 
@@ -47,6 +48,22 @@ This project uses ESLint and Prettier to enforce consistent code formatting and 
 
     ```npx eslint . --fix```
 
+## Testing
+
+1. Install dependency
+```bash
+uv sync
+```
+
+2. Build a zip
+```bash
+./build
+```
+
+3. Check the zip
+```bash
+uv run shexli nepali-calendar-gs-extension@subashghimire.info.np.zip
+```
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.

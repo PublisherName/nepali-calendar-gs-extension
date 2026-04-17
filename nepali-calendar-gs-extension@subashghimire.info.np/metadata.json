@@ -4,7 +4,6 @@
     "description": "Shows Nepali date along with events and festivals.",
     "url": "https://github.com/PublisherName/nepali-calendar-gs-extension",
     "shell-version": [
-        "45",
         "46",
         "47",
         "48",
