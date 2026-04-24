@@ -1,6 +1,17 @@
-import { readJsonFile, convertToNepaliNumber } from './Helper.js';
+import { readJsonFileAsync, convertToNepaliNumber } from './Helper.js';
 
 const yearDataCache = new Map();
+
+export const preloadYearData = async (extensionPath) => {
+  const years = [2081, 2082, 2083, 2084, 2085];
+  const loadPromises = years.map(async (year) => {
+    if (!yearDataCache.has(year)) {
+      const data = await readJsonFileAsync(`data/${year}.json`, extensionPath);
+      yearDataCache.set(year, data);
+    }
+  });
+  await Promise.all(loadPromises);
+};
 
 const nepaliCalendarData = {
   81: {
@@ -25,23 +36,16 @@ const nepaliCalendarData = {
   },
 };
 
-export const getYearDataFromCache = (year, extensionPath) => {
+export const getYearDataFromCache = (year) => {
   if (!year || isNaN(year)) {
     throw new Error('Invalid year parameter');
   }
   if (!yearDataCache.has(year)) {
-    try {
-      const data = readJsonFile(`data/${year}.json`, extensionPath);
-      if (Object.keys(data).length === 0) {
-        // eslint-disable-next-line no-console
-        console.warn(`No data found for year ${year}`);
-      }
-      yearDataCache.set(year, data);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(`Failed to load data for year ${year}:`, error);
-      return null;
-    }
+    // eslint-disable-next-line no-console
+    console.warn(
+      `No data found for year ${year} - ensure preloadYearData was called`
+    );
+    return null;
   }
   return yearDataCache.get(year);
 };
@@ -72,7 +76,7 @@ export const getCurrentNepaliDate = () => {
   };
 };
 
-export const formatNepaliDateData = (nepaliDate, extensionPath) => {
+export const formatNepaliDateData = (nepaliDate) => {
   const nepaliMonths = [
     'बैशाख',
     'जेठ',
@@ -102,10 +106,7 @@ export const formatNepaliDateData = (nepaliDate, extensionPath) => {
   const formattedDay = convertToNepaliNumber(nepaliDate.nepaliDay);
   const formattedDayOfWeek = nepaliWeekDays[nepaliDate.nepaliDayOfWeek - 1];
 
-  const { tithi, event } = getTithiAndEventForNepaliDate(
-    nepaliDate,
-    extensionPath
-  );
+  const { tithi, event } = getTithiAndEventForNepaliDate(nepaliDate);
 
   return {
     nepaliYear: formattedYear,
@@ -168,8 +169,8 @@ const adjustNepaliDate = (referenceDate, dateOffset) => {
   return [dateOffset[0], month, dateOffset[2]];
 };
 
-const getTithiAndEventForNepaliDate = (nepaliDate, extensionPath) => {
-  const data = getYearDataFromCache(nepaliDate.nepaliYear, extensionPath);
+const getTithiAndEventForNepaliDate = (nepaliDate) => {
+  const data = getYearDataFromCache(nepaliDate.nepaliYear);
   let tithi = '-';
   let event = '-';
 

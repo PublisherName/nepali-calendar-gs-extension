@@ -13,14 +13,14 @@ import {
 import {
   formatNepaliDateData,
   getCurrentNepaliDate,
+  preloadYearData,
 } from './utils/NepaliDateConverter.js';
 
 const Indicator = GObject.registerClass(
   class Indicator extends PanelMenu.Button {
-    _init(extensionPath) {
+    _init() {
       super._init(0.0, 'Nepali Date Extension');
       this._updateTimeout = null;
-      this._extensionPath = extensionPath;
       this._box = new St.BoxLayout({
         style_class: 'np-cal-panel-status-menu-box',
       });
@@ -87,10 +87,7 @@ const Indicator = GObject.registerClass(
     }
 
     _updateLabel() {
-      const nepaliDateInfo = formatNepaliDateData(
-        getCurrentNepaliDate(),
-        this._extensionPath
-      );
+      const nepaliDateInfo = formatNepaliDateData(getCurrentNepaliDate());
       this._nepaliDateLabel.set_text(
         `${nepaliDateInfo.nepaliDay} ${nepaliDateInfo.nepaliMonth} (${nepaliDateInfo.nepaliDayOfWeek})`
       );
@@ -169,8 +166,10 @@ export default class NepaliCalendar extends Extension {
     this._settings = this.getSettings();
     const position = this._settings.get_string('menu-position');
 
-    this._extension = new Indicator(this.path);
-    this._addToPanel(position);
+    preloadYearData(this.path).then(() => {
+      this._extension = new Indicator();
+      this._addToPanel(position);
+    });
 
     this._positionChangedId = this._settings.connect(
       'changed::menu-position',
@@ -199,11 +198,17 @@ export default class NepaliCalendar extends Extension {
   }
 
   _moveIndicator(newPosition) {
+    if (!this._extension) {
+      return;
+    }
     this._removeFromPanel();
     this._addToPanel(newPosition);
   }
 
   _removeFromPanel() {
+    if (!this._extension) {
+      return;
+    }
     const { container, menu } = this._extension;
     container?.get_parent()?.remove_child(container);
     Main.panel.menuManager.removeMenu(menu);
