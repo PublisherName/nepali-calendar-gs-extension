@@ -1,17 +1,26 @@
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
 
-export const readJsonFile = (filePath, extensionPath) => {
-  try {
-    const fullPath = `${extensionPath}/${filePath}`;
-    const fileContent = GLib.file_get_contents(fullPath)[1];
-    const decoder = new TextDecoder('utf-8');
-    const jsonString = decoder.decode(fileContent);
-    return JSON.parse(jsonString);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(`Error reading JSON file: ${filePath}`, error.message);
-    return {};
-  }
+Gio._promisify(Gio.File.prototype, 'load_contents_async');
+
+export const readJsonFileAsync = (filePath, extensionPath) => {
+  return new Promise((resolve) => {
+    const fullPath = GLib.build_filenamev([extensionPath, filePath]);
+    const file = Gio.File.new_for_path(fullPath);
+
+    file
+      .load_contents_async(null)
+      .then(([contents]) => {
+        const decoder = new TextDecoder('utf-8');
+        const jsonString = decoder.decode(contents);
+        resolve(JSON.parse(jsonString));
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(`Error reading JSON file: ${filePath}`, error.message);
+        resolve({});
+      });
+  });
 };
 
 export const convertToNepaliNumber = (number) => {
