@@ -19,7 +19,7 @@ import {
 const Indicator = GObject.registerClass(
   class Indicator extends PanelMenu.Button {
     _init() {
-      super._init(0.0, 'Nepali Date Extension');
+      super._init(0.5, 'Nepali Date Extension');
       this._updateTimeout = null;
       this._box = new St.BoxLayout({
         style_class: 'np-cal-panel-status-menu-box',
